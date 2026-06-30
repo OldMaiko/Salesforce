@@ -1333,10 +1333,17 @@ h3 {
 }
 
 .capability-detail-visual img {
+  display: block;
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
   object-position: top left;
+}
+
+body[data-capability="review"] .capability-detail-visual img {
+  aspect-ratio: 35 / 12;
+  object-fit: contain;
+  object-position: center;
 }
 
 .capability-detail-visual figcaption {
