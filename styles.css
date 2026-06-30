@@ -1579,10 +1579,13 @@ body[data-capability="review"] .capability-detail-visual img {
 }
 
 .guide-shot img {
+  display: block;
   width: 100%;
-  aspect-ratio: 16 / 7.5;
-  object-fit: cover;
-  object-position: top left;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+  object-position: center;
+  background: #ffffff;
   border-bottom: 1px solid var(--line);
 }
 
