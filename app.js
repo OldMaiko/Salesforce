@@ -907,7 +907,6 @@ const els = {
   rulesGrid: document.querySelector("#rulesGrid"),
   faqList: document.querySelector("#faqList"),
   termGrid: document.querySelector("#termGrid"),
-  reset: document.querySelector("#resetFilters"),
   showAllTerms: document.querySelector("#showAllTerms"),
   modal: document.querySelector("#imageModal"),
   modalImage: document.querySelector("#modalImage"),
@@ -932,12 +931,56 @@ function tag(text, color = "") {
   return `<span class="tag ${color}">${escapeHtml(text)}</span>`;
 }
 
-function screenshotButton(key) {
-  const [src, caption] = screenshots[key];
-  return `<button class="gallery-thumb" type="button" data-image="${key}">
-    <img src="${src}" alt="${escapeHtml(caption)}" />
-    <span>${escapeHtml(caption)}</span>
-  </button>`;
+function screenshotTitle(caption) {
+  return caption.replace(/^图\s*\d+：/, "");
+}
+
+function screenshotInline(key) {
+  const image = screenshots[key];
+  if (!image) return "";
+  const [src, caption] = image;
+  const title = screenshotTitle(caption);
+  return `
+    <button class="guide-shot guide-inline-shot" type="button" data-image="${key}" aria-label="打开截图：${escapeHtml(title)}">
+      <img src="${src}" alt="${escapeHtml(caption)}" />
+      <span>
+        <strong>界面参考</strong>
+        <small>${escapeHtml(title)}</small>
+      </span>
+    </button>
+  `;
+}
+
+function screenshotsByStep(screenshotKeys, stepCount) {
+  const buckets = Array.from({ length: stepCount }, () => []);
+  const shotCount = screenshotKeys.length;
+  if (!stepCount || !shotCount) return buckets;
+
+  screenshotKeys.forEach((key, index) => {
+    const target = shotCount === 1
+      ? Math.min(1, stepCount - 1)
+      : Math.min(stepCount - 1, Math.max(0, Math.round(((index + 1) * stepCount) / (shotCount + 1)) - 1));
+    buckets[target].push(key);
+  });
+
+  return buckets;
+}
+
+function renderArticleStepList(article) {
+  const screenshotBuckets = screenshotsByStep(article.screenshots, article.steps.length);
+  return `
+    <ol class="step-list">
+      ${article.steps.map((step, index) => `
+        <li>
+          <span>${index + 1}</span>
+          <div class="step-copy">
+            <p>${escapeHtml(step)}</p>
+            ${screenshotBuckets[index].map(screenshotInline).join("")}
+          </div>
+        </li>
+      `).join("")}
+    </ol>
+  `;
 }
 
 function matchesFeature(feature) {
@@ -1007,9 +1050,7 @@ function renderHelpArticleDetail(article) {
 
     <section class="article-section">
       <h4>操作步骤</h4>
-      <ol class="step-list">
-        ${article.steps.map((step, index) => `<li><span>${index + 1}</span><p>${escapeHtml(step)}</p></li>`).join("")}
-      </ol>
+      ${renderArticleStepList(article)}
     </section>
 
     <section class="article-section">
@@ -1020,13 +1061,6 @@ function renderHelpArticleDetail(article) {
     <section class="article-section">
       <h4>常见卡点</h4>
       ${list(article.tips)}
-    </section>
-
-    <section class="article-section">
-      <h4>相关截图</h4>
-      <div class="gallery-row help-gallery">
-        ${article.screenshots.map(screenshotButton).join("")}
-      </div>
     </section>
   `;
 }
@@ -1273,18 +1307,6 @@ document.addEventListener("click", (event) => {
     const open = item.classList.toggle("is-open");
     faqButton.setAttribute("aria-expanded", String(open));
   }
-});
-
-els.reset.addEventListener("click", () => {
-  state.category = "全部";
-  state.helpCategory = "全部";
-  state.selectedArticle = helpArticles[0].id;
-  renderHelpFilters();
-  renderHelpCenter();
-  renderFilters();
-  renderFeatures();
-  renderTerms();
-  refreshIcons();
 });
 
 els.showAllTerms.addEventListener("click", () => {
