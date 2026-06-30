@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CRM 功能中心 | Salesforce 销售闭环</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script defer src="assets/lucide.min.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#overview" aria-label="返回 CRM 功能中心首页">
+        <img src="assets/shokz-logo.png" alt="Shokz" />
+        <span>
+          <strong>CRM 功能中心</strong>
+          <small>Salesforce 销售闭环</small>
+        </span>
+      </a>
+
+      <nav class="topnav" aria-label="主导航">
+        <a href="#workflow">流程</a>
+        <a href="#features">能力地图</a>
+        <a href="#help">帮助中心</a>
+        <a href="#objects">对象</a>
+        <a href="#automation">自动化</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="toptools">
+        <label class="searchbox" for="globalSearch">
+          <span>搜索</span>
+          <input id="globalSearch" type="search" placeholder="搜索步骤、能力、对象、状态、FAQ" autocomplete="off" />
+        </label>
+        <button class="toolbutton" id="resetFilters" type="button" title="重置筛选" aria-label="重置筛选">
+          <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+          <span>重置</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="layout">
+      <main>
+        <section class="hero section" id="overview">
+          <div class="hero-copy">
+            <p class="eyebrow">SHOKZ SALES ENABLEMENT</p>
+            <h1>Salesforce CRM<br />销售工作台</h1>
+            <p class="lead">
+              从展会线索到客户互动、样品申请和商机复盘，把销售团队每天要用的 CRM 能力组织成一个清晰、可浏览的网站。
+            </p>
+            <div class="metric-row" aria-label="功能覆盖指标">
+              <div>
+                <strong>31</strong>
+                <span>帮助文章</span>
+              </div>
+              <div>
+                <strong>13</strong>
+                <span>对象/工具</span>
+              </div>
+              <div>
+                <strong>37</strong>
+                <span>界面截图</span>
+              </div>
+              <div>
+                <strong>6</strong>
+                <span>自动化规则</span>
+              </div>
+            </div>
+            <div class="hero-actions">
+              <a class="primary-action" href="#help">打开帮助中心</a>
+              <a class="secondary-action" href="#features">浏览能力地图</a>
+            </div>
+          </div>
+          <div class="hero-showcase" aria-label="CRM 展示预览">
+            <figure class="hero-screen">
+              <img src="assets/fig02.jpg" alt="Salesforce 主页 Tableau 看板" />
+              <figcaption>主页看板、Campaign 结果和 Opportunity 跟进在一个工作台里串起来。</figcaption>
+            </figure>
+            <div class="hero-flow">
+              <img src="assets/fig01-flow.png" alt="Salesforce 销售端到端流程图" />
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="workflow">
+          <div class="section-heading">
+            <p class="eyebrow">End-to-end flow</p>
+            <h2>销售全流程</h2>
+            <p>每一步都留下可追踪的数据，最后回到 Campaign 看板做复盘。</p>
+          </div>
+          <div class="workflow-grid" id="workflowGrid"></div>
+          <div class="workflow-detail" id="workflowDetail" aria-live="polite"></div>
+        </section>
+
+        <section class="section" id="features">
+          <div class="section-heading split">
+            <div>
+              <p class="eyebrow">Capability map</p>
+              <h2>CRM 能力地图</h2>
+              <p>先按工作场景理解 Salesforce 能做什么；需要操作时，再进入对应 Help Center 文章。</p>
+            </div>
+            <div class="feature-count" id="featureCount">0 个能力</div>
+          </div>
+          <div class="filterbar" id="filterbar" aria-label="能力分类筛选"></div>
+          <div class="feature-grid capability-grid" id="featureGrid"></div>
+        </section>
+
+        <section class="section" id="help">
+          <div class="section-heading split">
+            <div>
+              <p class="eyebrow">Help Center</p>
+              <h2>按步骤完成每个 CRM 操作</h2>
+              <p>把手册拆成可执行文章：从入口、点击路径、字段填写，到完成后的验证和常见卡点。</p>
+            </div>
+            <div class="feature-count" id="helpCount">0 篇文章</div>
+          </div>
+          <div class="filterbar help-filterbar" id="helpFilterbar" aria-label="帮助文章分类筛选"></div>
+          <div class="help-layout">
+            <aside class="help-list" id="helpArticleList" aria-label="帮助文章列表"></aside>
+            <article class="help-article" id="helpArticleDetail" aria-live="polite"></article>
+          </div>
+        </section>
+
+        <section class="section" id="objects">
+          <div class="section-heading">
+            <p class="eyebrow">Data objects</p>
+            <h2>对象与工具</h2>
+            <p>先理解对象、报表和自定义工具之间的关系，再进入具体操作会轻松很多。</p>
+          </div>
+          <div class="object-grid" id="objectGrid"></div>
+        </section>
+
+        <section class="section" id="automation">
+          <div class="section-heading">
+            <p class="eyebrow">Automation</p>
+            <h2>系统自动化与提醒</h2>
+            <p>这些规则决定状态、看板和提醒是否准确触发。</p>
+          </div>
+          <div class="rules-grid" id="rulesGrid"></div>
+        </section>
+
+        <section class="section" id="faq">
+          <div class="section-heading">
+            <p class="eyebrow">Troubleshooting</p>
+            <h2>常见问题排查</h2>
+            <p>先检查视图、状态和关联关系，再联系管理员。</p>
+          </div>
+          <div class="faq-list" id="faqList"></div>
+        </section>
+
+        <section class="section" id="glossary">
+          <div class="section-heading split">
+            <div>
+              <p class="eyebrow">Glossary</p>
+              <h2>Salesforce 常用词汇</h2>
+              <p>快速对齐页面中的英文术语。</p>
+            </div>
+            <button class="secondary-action compact" id="showAllTerms" type="button">显示全部术语</button>
+          </div>
+          <div class="term-grid" id="termGrid"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="image-modal" id="imageModal" hidden>
+      <div class="image-modal-backdrop" data-close-modal></div>
+      <figure class="image-modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalCaption">
+        <button class="modal-close" type="button" data-close-modal aria-label="关闭截图">关闭</button>
+        <img id="modalImage" alt="" />
+        <figcaption id="modalCaption"></figcaption>
+      </figure>
+    </div>
+
+    <button class="back-top" id="backTop" type="button" aria-label="返回顶部">
+      <i data-lucide="arrow-up" aria-hidden="true"></i>
+      <span>顶部</span>
+    </button>
+  </body>
+</html>
