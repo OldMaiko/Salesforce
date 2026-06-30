@@ -6,19 +6,19 @@ const crmHelpArticles = data.helpArticles || [];
 const capabilityExtras = {
   "orientation": {
     objects: ["Sales App", "Global Search", "Favorites", "Owner", "Task"],
-    outputs: ["更少重复记录", "更快找到入口", "更明确的下一步动作"],
+    outputs: ["减少重复记录", "更快找到入口", "下一步动作更清楚"],
   },
   "customer-data": {
     objects: ["Lead", "Contact", "Account", "List View", "Campaign Member"],
-    outputs: ["清晰的客户池", "准确的责任归属", "可推进的转化记录"],
+    outputs: ["清楚的客户池", "责任归属清楚", "能继续推进的转化记录"],
   },
   "campaign": {
     objects: ["Campaign", "Campaign Member", "Campaign Result", "Participant", "Dashboard"],
-    outputs: ["统一的展会入口", "可计算的活动结果", "可复盘的展会数据"],
+    outputs: ["统一的展会入口", "能计算的活动结果", "能复盘的展会数据"],
   },
   "email": {
     objects: ["List Email", "Activity", "Lead Status", "Campaign", "Report"],
-    outputs: ["可追踪邮件记录", "客户互动证据", "状态推进依据"],
+    outputs: ["能追溯的邮件记录", "客户互动证据", "状态推进依据"],
   },
   "sample": {
     objects: ["Contact Sample Request", "SKU", "Tracking", "Request Sent", "Samples Sent"],
@@ -26,15 +26,15 @@ const capabilityExtras = {
   },
   "opportunity": {
     objects: ["Opportunity", "Shokz Quote", "Shokz Product", "Contact Roles", "Campaign"],
-    outputs: ["可预测商机", "结构化报价产品信息", "清楚的 Campaign 归因"],
+    outputs: ["可预测的商机", "按字段记录的报价和产品信息", "清楚的 Campaign 归因"],
   },
   "reporting": {
     objects: ["Dashboard", "Report", "Forecast", "Tableau", "Opportunity"],
-    outputs: ["汇总趋势", "底层明细", "预测校准"],
+    outputs: ["汇总趋势", "原始明细", "预测校准"],
   },
   "tools": {
     objects: ["Sales Data Audit Export", "Notes", "History", "To Do List", "Activity"],
-    outputs: ["可控的数据导出", "更快的页面回溯", "明确的待办追踪"],
+    outputs: ["有范围的数据导出", "更快回到刚才的页面", "待办事项更清楚"],
   },
   "review": {
     objects: ["Campaign", "Activity", "Sample", "Opportunity", "ROI"],
@@ -98,7 +98,7 @@ function renderGuideArticle(article, index) {
           <h2>${escapeHtml(article.title)}</h2>
           <p>${escapeHtml(article.summary)}</p>
         </div>
-        <a class="secondary-action compact" href="../index.html?article=${encodeURIComponent(article.id)}#help">在 Help Center 打开</a>
+        <a class="secondary-action compact" href="../index.html?article=${encodeURIComponent(article.id)}#help">在帮助中心打开</a>
       </div>
 
       <div class="guide-columns">
@@ -187,17 +187,17 @@ function renderPage() {
   const outputs = extras.outputs || capability.solves || [];
   const [imageSrc, imageCaption] = crmScreenshots[capability.screenshot] || [];
 
-  document.title = `${capability.title} | CRM 能力中心`;
+  document.title = `${capability.title} | CRM 功能指南`;
   app.innerHTML = `
     <section class="capability-detail-hero ${capability.accent}">
       <div class="capability-detail-copy">
-        <a class="back-link" href="../index.html#features">返回能力地图</a>
+        <a class="back-link" href="../index.html#features">返回功能地图</a>
         <p class="eyebrow">${escapeHtml(capability.category)}</p>
         <h1>${escapeHtml(capability.title)}</h1>
         <p class="lead">${escapeHtml(capability.summary)}</p>
         <div class="capability-detail-meta">
-          <span><i data-lucide="${capability.icon}" aria-hidden="true"></i>${relatedArticles.length} 篇步骤文章</span>
-          <span>${objects.length} 个相关对象/工具</span>
+          <span><i data-lucide="${capability.icon}" aria-hidden="true"></i>${relatedArticles.length} 篇步骤指南</span>
+          <span>${objects.length} 个相关对象和工具</span>
           <span>${relatedArticles.reduce((sum, article) => sum + article.steps.length, 0)} 个操作步骤</span>
         </div>
       </div>
@@ -210,15 +210,15 @@ function renderPage() {
     <section class="capability-detail-section">
       <div class="capability-detail-grid">
         <article class="capability-panel">
-          <h2>解决什么</h2>
+          <h2>能解决的问题</h2>
           ${renderList(capability.solves)}
         </article>
         <article class="capability-panel">
-          <h2>何时使用</h2>
+          <h2>什么时候用</h2>
           ${renderList(capability.when)}
         </article>
         <article class="capability-panel">
-          <h2>最终输出</h2>
+          <h2>最后得到什么</h2>
           ${renderList(outputs)}
         </article>
       </div>
@@ -227,7 +227,7 @@ function renderPage() {
     <section class="capability-detail-section compact">
       <div class="section-heading">
         <p class="eyebrow">Objects and tools</p>
-        <h2>相关对象与工具</h2>
+        <h2>相关对象和工具</h2>
       </div>
       <div class="object-chip-row">${renderChips(objects)}</div>
     </section>
@@ -236,13 +236,13 @@ function renderPage() {
       <div class="section-heading split">
         <div>
           <p class="eyebrow">Step-by-step guides</p>
-          <h2>功能操作步骤</h2>
-          <p>以下内容来自 Salesforce 使用手册，并按这个能力重新组织。每篇文章都包含操作前提、步骤、验证、卡点和截图。</p>
+          <h2>具体操作步骤</h2>
+          <p>以下内容来自 Salesforce 使用手册，并按这个功能重新组织。每篇指南都写清楚开始前要准备什么、怎么操作、做完怎么检查，以及容易卡住的地方。</p>
         </div>
-        <a class="secondary-action compact" href="../index.html#help">查看全部文章</a>
+        <a class="secondary-action compact" href="../index.html#help">查看全部指南</a>
       </div>
 
-      <nav class="capability-toc" aria-label="本能力文章导航">
+      <nav class="capability-toc" aria-label="本页指南导航">
         ${relatedArticles.map((article) => `<a href="#guide-${escapeHtml(article.id)}">${escapeHtml(article.title)}</a>`).join("")}
       </nav>
 

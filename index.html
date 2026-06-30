@@ -3,24 +3,24 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CRM 功能中心 | Salesforce 销售闭环</title>
+    <title>CRM 使用指南 | Salesforce 销售操作手册</title>
     <link rel="stylesheet" href="styles.css" />
     <script defer src="assets/lucide.min.js"></script>
     <script defer src="app.js"></script>
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="#overview" aria-label="返回 CRM 功能中心首页">
+      <a class="brand" href="#overview" aria-label="返回 CRM 使用指南首页">
         <img src="assets/shokz-logo.png" alt="Shokz" />
         <span>
-          <strong>CRM 功能中心</strong>
-          <small>Salesforce 销售闭环</small>
+          <strong>CRM 使用指南</strong>
+          <small>Salesforce 销售操作手册</small>
         </span>
       </a>
 
       <nav class="topnav" aria-label="主导航">
         <a href="#workflow">流程</a>
-        <a href="#features">能力地图</a>
+        <a href="#features">功能地图</a>
         <a href="#help">帮助中心</a>
         <a href="#objects">对象</a>
         <a href="#automation">自动化</a>
@@ -30,7 +30,7 @@
       <div class="toptools">
         <label class="searchbox" for="globalSearch">
           <span>搜索</span>
-          <input id="globalSearch" type="search" placeholder="搜索步骤、能力、对象、状态、FAQ" autocomplete="off" />
+          <input id="globalSearch" type="search" placeholder="搜索步骤、功能、对象、状态、FAQ" autocomplete="off" />
         </label>
         <button class="toolbutton" id="resetFilters" type="button" title="重置筛选" aria-label="重置筛选">
           <i data-lucide="rotate-ccw" aria-hidden="true"></i>
@@ -46,38 +46,38 @@
             <p class="eyebrow">SHOKZ SALES ENABLEMENT</p>
             <h1>Salesforce CRM<br />销售工作台</h1>
             <p class="lead">
-              从展会线索到客户互动、样品申请和商机复盘，把销售团队每天要用的 CRM 能力组织成一个清晰、可浏览的网站。
+              销售每天要查的入口、步骤和截图都放在这里：展会名单、客户邮件、送样申请、商机跟进和展会复盘。
             </p>
-            <div class="metric-row" aria-label="功能覆盖指标">
+            <div class="metric-row" aria-label="指南覆盖范围">
               <div>
                 <strong>31</strong>
-                <span>帮助文章</span>
+                <span>操作指南</span>
               </div>
               <div>
                 <strong>13</strong>
-                <span>对象/工具</span>
+                <span>对象和工具</span>
               </div>
               <div>
                 <strong>37</strong>
-                <span>界面截图</span>
+                <span>页面截图</span>
               </div>
               <div>
                 <strong>6</strong>
-                <span>自动化规则</span>
+                <span>自动提醒</span>
               </div>
             </div>
             <div class="hero-actions">
               <a class="primary-action" href="#help">打开帮助中心</a>
-              <a class="secondary-action" href="#features">浏览能力地图</a>
+              <a class="secondary-action" href="#features">浏览功能地图</a>
             </div>
           </div>
-          <div class="hero-showcase" aria-label="CRM 展示预览">
+          <div class="hero-showcase" aria-label="CRM 页面预览">
             <figure class="hero-screen">
               <img src="assets/fig02.jpg" alt="Salesforce 主页 Tableau 看板" />
-              <figcaption>主页看板、Campaign 结果和 Opportunity 跟进在一个工作台里串起来。</figcaption>
+              <figcaption>主页看板、Campaign 结果和 Opportunity 跟进都能从这里找到入口。</figcaption>
             </figure>
             <div class="hero-flow">
-              <img src="assets/fig01-flow.png" alt="Salesforce 销售端到端流程图" />
+              <img src="assets/fig01-flow.png" alt="Salesforce 销售流程图" />
             </div>
           </div>
         </section>
@@ -86,7 +86,7 @@
           <div class="section-heading">
             <p class="eyebrow">End-to-end flow</p>
             <h2>销售全流程</h2>
-            <p>每一步都留下可追踪的数据，最后回到 Campaign 看板做复盘。</p>
+            <p>每一步都留下记录，展会结束后可以回到 Campaign 看板查结果。</p>
           </div>
           <div class="workflow-grid" id="workflowGrid"></div>
           <div class="workflow-detail" id="workflowDetail" aria-live="polite"></div>
@@ -96,12 +96,12 @@
           <div class="section-heading split">
             <div>
               <p class="eyebrow">Capability map</p>
-              <h2>CRM 能力地图</h2>
-              <p>先按工作场景理解 Salesforce 能做什么；需要操作时，再进入对应 Help Center 文章。</p>
+              <h2>CRM 功能地图</h2>
+              <p>先按工作场景找功能。需要动手操作时，再打开对应的步骤指南。</p>
             </div>
-            <div class="feature-count" id="featureCount">0 个能力</div>
+            <div class="feature-count" id="featureCount">0 个功能</div>
           </div>
-          <div class="filterbar" id="filterbar" aria-label="能力分类筛选"></div>
+          <div class="filterbar" id="filterbar" aria-label="功能分类筛选"></div>
           <div class="feature-grid capability-grid" id="featureGrid"></div>
         </section>
 
@@ -110,13 +110,13 @@
             <div>
               <p class="eyebrow">Help Center</p>
               <h2>按步骤完成每个 CRM 操作</h2>
-              <p>把手册拆成可执行文章：从入口、点击路径、字段填写，到完成后的验证和常见卡点。</p>
+              <p>手册内容已经拆成一篇篇操作指南：入口在哪里、点哪一步、字段怎么填、做完怎么检查。</p>
             </div>
-            <div class="feature-count" id="helpCount">0 篇文章</div>
+            <div class="feature-count" id="helpCount">0 篇指南</div>
           </div>
-          <div class="filterbar help-filterbar" id="helpFilterbar" aria-label="帮助文章分类筛选"></div>
+          <div class="filterbar help-filterbar" id="helpFilterbar" aria-label="操作指南分类筛选"></div>
           <div class="help-layout">
-            <aside class="help-list" id="helpArticleList" aria-label="帮助文章列表"></aside>
+            <aside class="help-list" id="helpArticleList" aria-label="操作指南列表"></aside>
             <article class="help-article" id="helpArticleDetail" aria-live="polite"></article>
           </div>
         </section>
@@ -125,7 +125,7 @@
           <div class="section-heading">
             <p class="eyebrow">Data objects</p>
             <h2>对象与工具</h2>
-            <p>先理解对象、报表和自定义工具之间的关系，再进入具体操作会轻松很多。</p>
+            <p>先看懂对象、报表和自定义工具的关系，再去操作会少走弯路。</p>
           </div>
           <div class="object-grid" id="objectGrid"></div>
         </section>
@@ -134,7 +134,7 @@
           <div class="section-heading">
             <p class="eyebrow">Automation</p>
             <h2>系统自动化与提醒</h2>
-            <p>这些规则决定状态、看板和提醒是否准确触发。</p>
+            <p>这些规则会影响状态、看板和提醒。</p>
           </div>
           <div class="rules-grid" id="rulesGrid"></div>
         </section>
@@ -143,7 +143,7 @@
           <div class="section-heading">
             <p class="eyebrow">Troubleshooting</p>
             <h2>常见问题排查</h2>
-            <p>先检查视图、状态和关联关系，再联系管理员。</p>
+            <p>先查视图、状态和关联关系。仍然找不到原因，再联系管理员。</p>
           </div>
           <div class="faq-list" id="faqList"></div>
         </section>
@@ -153,9 +153,9 @@
             <div>
               <p class="eyebrow">Glossary</p>
               <h2>Salesforce 常用词汇</h2>
-              <p>快速对齐页面中的英文术语。</p>
+              <p>先把页面里的英文术语看明白。</p>
             </div>
-            <button class="secondary-action compact" id="showAllTerms" type="button">显示全部术语</button>
+            <button class="secondary-action compact" id="showAllTerms" type="button">查看全部术语</button>
           </div>
           <div class="term-grid" id="termGrid"></div>
         </section>
