@@ -1089,7 +1089,7 @@ function renderFeatures() {
       const [src, caption] = screenshots[feature.screenshot];
       const previewTitle = caption.replace(/^图\s*\d+：/, "");
       return `
-        <article class="capability-card ${feature.accent}">
+        <a class="capability-card ${feature.accent}" href="capabilities/${feature.id}.html" aria-label="打开功能页：${escapeHtml(feature.title)}">
           <div class="capability-top">
             <span class="capability-icon ${feature.accent}"><i data-lucide="${feature.icon}" aria-hidden="true"></i></span>
             ${tag(feature.category, feature.accent)}
@@ -1097,21 +1097,21 @@ function renderFeatures() {
           <h3>${escapeHtml(feature.title)}</h3>
           <div class="capability-story">
             <p>${escapeHtml(feature.summary)}</p>
-            <button class="capability-inline-shot" type="button" data-image="${feature.screenshot}" aria-label="打开截图：${escapeHtml(previewTitle)}">
+            <div class="capability-inline-shot">
               <img src="${src}" alt="${escapeHtml(caption)}" />
               <span>
                 <strong>页面预览</strong>
                 <small>${escapeHtml(previewTitle)}</small>
               </span>
-            </button>
+            </div>
             <p class="capability-context-line">常用对象和入口：${feature.tags.slice(0, 4).map(escapeHtml).join("、")}</p>
           </div>
           <div class="story-points">${feature.tags.slice(0, 4).map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div>
           <div class="capability-actions">
             <span>${feature.articleIds.length} 篇相关指南</span>
-            <a href="capabilities/${feature.id}.html">打开功能页</a>
+            <span class="capability-card-cta">打开功能页</span>
           </div>
-        </article>
+        </a>
       `;
     })
     .join("");
