@@ -1242,6 +1242,7 @@ document.addEventListener("click", (event) => {
 
   const jumpArticleButton = event.target.closest("[data-jump-article]");
   if (jumpArticleButton) {
+    event.preventDefault();
     const article = helpArticles.find((item) => item.id === jumpArticleButton.dataset.jumpArticle);
     if (!article) return;
     state.category = "全部";

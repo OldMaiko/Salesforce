@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>CRM 使用指南 | Salesforce 销售操作手册</title>
-    <link rel="stylesheet" href="styles.css?v=20260630-featurecards" />
+    <link rel="stylesheet" href="styles.css?v=20260630-portalv2" />
     <script defer src="assets/lucide.min.js"></script>
-    <script defer src="app.js?v=20260630-featurecards"></script>
+    <script defer src="app.js?v=20260630-portalv2"></script>
   </head>
   <body>
     <header class="topbar">
@@ -19,12 +19,10 @@
       </a>
 
       <nav class="topnav" aria-label="主导航">
-        <a href="#workflow">流程</a>
+        <a href="#quickstart">快速开始</a>
         <a href="#features">功能地图</a>
-        <a href="#help">帮助中心</a>
-        <a href="#objects">对象</a>
-        <a href="#automation">自动化</a>
-        <a href="#faq">FAQ</a>
+        <a href="#help">操作指南</a>
+        <a href="#reference">参考资料</a>
       </nav>
 
     </header>
@@ -33,13 +31,13 @@
       <main>
         <section class="hero section" id="overview">
           <div class="hero-copy">
-            <p class="eyebrow">SHOKZ SALES ENABLEMENT</p>
+            <p class="eyebrow">SHOKZ CRM WORKSPACE</p>
             <h1>Salesforce CRM<br />销售工作台</h1>
             <p class="lead">
-              销售每天要查的入口、步骤和截图都放在这里：展会名单、客户邮件、送样申请、商机跟进和展会复盘。
+              从今天要处理的客户、展会、邮件、送样和商机进入对应指南，减少重复查找和口径误差。
             </p>
             <div class="hero-actions">
-              <a class="primary-action" href="#help">打开帮助中心</a>
+              <a class="primary-action" href="#quickstart">从常用操作开始</a>
               <a class="secondary-action" href="#features">浏览功能地图</a>
             </div>
           </div>
@@ -54,22 +52,60 @@
           </div>
         </section>
 
-        <section class="section" id="workflow">
-          <div class="section-heading">
-            <p class="eyebrow">End-to-end flow</p>
-            <h2>销售全流程</h2>
-            <p>每一步都留下记录，展会结束后可以回到 Campaign 看板查结果。</p>
+        <section class="section quickstart-section" id="quickstart">
+          <div class="section-heading split">
+            <div>
+              <p class="eyebrow">Start here</p>
+              <h2>按今天的工作场景进入</h2>
+              <p>把最常用的销售动作放在前面：先找场景，再打开对应步骤。</p>
+            </div>
           </div>
-          <div class="workflow-grid" id="workflowGrid"></div>
-          <div class="workflow-detail" id="workflowDetail" aria-live="polite"></div>
+          <div class="quick-action-grid" aria-label="常用操作入口">
+            <a class="quick-action-card" href="?article=daily-rhythm#help" data-jump-article="daily-rhythm">
+              <span>每天开始</span>
+              <strong>检查待办、客户互动和下一步动作</strong>
+              <p>适合新用户或每天开工时快速确认责任人、Activity 和 Task。</p>
+              <em>打开操作指南</em>
+            </a>
+            <a class="quick-action-card" href="?article=campaign-image-display#help" data-jump-article="campaign-image-display">
+              <span>展会资料</span>
+              <strong>上传并展示 Campaign 展会图片</strong>
+              <p>把展位图、现场图和资料入口放回 Campaign 页面，方便团队复盘。</p>
+              <em>打开操作指南</em>
+            </a>
+            <a class="quick-action-card" href="?article=import-leads-contacts#help" data-jump-article="import-leads-contacts">
+              <span>名单导入</span>
+              <strong>导入 Leads 和 Contacts 到 Campaign</strong>
+              <p>按模板清洗数据，检查字段映射和样品数量，减少导入后返工。</p>
+              <em>打开操作指南</em>
+            </a>
+            <a class="quick-action-card" href="?article=create-sample-request#help" data-jump-article="create-sample-request">
+              <span>送样申请</span>
+              <strong>创建 Contact Sample Request</strong>
+              <p>从客户记录进入正式送样申请，补齐 SKU、数量和收件信息。</p>
+              <em>打开操作指南</em>
+            </a>
+          </div>
+
+          <div class="workflow-block">
+            <div class="workflow-block-heading">
+              <div>
+                <p class="eyebrow">End-to-end flow</p>
+                <h3>销售全流程</h3>
+              </div>
+              <p>每一步都留下记录，展会结束后可以回到 Campaign 看板查结果。</p>
+            </div>
+            <div class="workflow-grid" id="workflowGrid"></div>
+            <div class="workflow-detail" id="workflowDetail" aria-live="polite"></div>
+          </div>
         </section>
 
         <section class="section" id="features">
           <div class="section-heading split">
             <div>
               <p class="eyebrow">Capability map</p>
-              <h2>CRM 功能地图</h2>
-              <p>先按工作场景找功能。需要动手操作时，再打开对应的步骤指南。</p>
+              <h2>按工作场景找功能</h2>
+              <p>每张功能卡都可以直接进入功能页，再从功能页跳到相关步骤指南。</p>
             </div>
             <div class="feature-count" id="featureCount">0 个功能</div>
           </div>
@@ -80,9 +116,9 @@
         <section class="section" id="help">
           <div class="section-heading split">
             <div>
-              <p class="eyebrow">Help Center</p>
-              <h2>按步骤完成每个 CRM 操作</h2>
-              <p>手册内容已经拆成一篇篇操作指南：入口在哪里、点哪一步、字段怎么填、做完怎么检查。</p>
+              <p class="eyebrow">Guide library</p>
+              <h2>操作指南库</h2>
+              <p>每篇指南都包含入口、步骤、截图、完成后检查和常见卡点。</p>
             </div>
             <div class="feature-count" id="helpCount">0 篇指南</div>
           </div>
@@ -93,31 +129,47 @@
           </div>
         </section>
 
-        <section class="section" id="objects">
-          <div class="section-heading">
-            <p class="eyebrow">Data objects</p>
-            <h2>对象与工具</h2>
-            <p>先看懂对象、报表和自定义工具的关系，再去操作会少走弯路。</p>
+        <section class="section reference-section" id="reference">
+          <div class="section-heading split">
+            <div>
+              <p class="eyebrow">Reference</p>
+              <h2>参考资料</h2>
+              <p>对象、自动化和排查内容作为辅助资料保留在底部，操作时优先回到功能地图或指南库。</p>
+            </div>
+            <nav class="reference-nav" aria-label="参考资料导航">
+              <a href="#objects">对象</a>
+              <a href="#automation">自动化</a>
+              <a href="#faq">FAQ</a>
+            </nav>
           </div>
-          <div class="object-grid" id="objectGrid"></div>
-        </section>
+          <div class="reference-stack">
+            <section class="reference-panel" id="objects">
+              <div class="section-heading">
+                <p class="eyebrow">Data objects</p>
+                <h2>数据对象参考</h2>
+                <p>先看懂对象、报表和自定义工具的关系，再去操作会少走弯路。</p>
+              </div>
+              <div class="object-grid" id="objectGrid"></div>
+            </section>
 
-        <section class="section" id="automation">
-          <div class="section-heading">
-            <p class="eyebrow">Automation</p>
-            <h2>系统自动化与提醒</h2>
-            <p>这些规则会影响状态、看板和提醒。</p>
-          </div>
-          <div class="rules-grid" id="rulesGrid"></div>
-        </section>
+            <section class="reference-panel" id="automation">
+              <div class="section-heading">
+                <p class="eyebrow">Automation</p>
+                <h2>自动化规则参考</h2>
+                <p>这些规则会影响状态、看板和提醒。</p>
+              </div>
+              <div class="rules-grid" id="rulesGrid"></div>
+            </section>
 
-        <section class="section" id="faq">
-          <div class="section-heading">
-            <p class="eyebrow">Troubleshooting</p>
-            <h2>常见问题排查</h2>
-            <p>先查视图、状态和关联关系。仍然找不到原因，再联系管理员。</p>
+            <section class="reference-panel" id="faq">
+              <div class="section-heading">
+                <p class="eyebrow">Troubleshooting</p>
+                <h2>常见问题排查</h2>
+                <p>先查视图、状态和关联关系。仍然找不到原因，再联系管理员。</p>
+              </div>
+              <div class="faq-list" id="faqList"></div>
+            </section>
           </div>
-          <div class="faq-list" id="faqList"></div>
         </section>
       </main>
     </div>
