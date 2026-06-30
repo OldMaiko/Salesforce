@@ -1143,6 +1143,7 @@ function renderFeatures() {
   els.featureGrid.innerHTML = filtered
     .map((feature) => {
       const [src, caption] = screenshots[feature.screenshot];
+      const previewTitle = caption.replace(/^图\s*\d+：/, "");
       return `
         <article class="capability-card ${feature.accent}">
           <div class="capability-top">
@@ -1150,17 +1151,21 @@ function renderFeatures() {
             ${tag(feature.category, feature.accent)}
           </div>
           <h3>${escapeHtml(feature.title)}</h3>
-          <p>${escapeHtml(feature.summary)}</p>
-          <div class="story-points">${feature.tags.slice(0, 4).map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div>
-          <div class="capability-footer">
-            <button class="capability-shot" type="button" data-image="${feature.screenshot}">
+          <div class="capability-story">
+            <p>${escapeHtml(feature.summary)}</p>
+            <button class="capability-inline-shot" type="button" data-image="${feature.screenshot}" aria-label="打开截图：${escapeHtml(previewTitle)}">
               <img src="${src}" alt="${escapeHtml(caption)}" />
-              <span>查看截图</span>
+              <span>
+                <strong>页面预览</strong>
+                <small>${escapeHtml(previewTitle)}</small>
+              </span>
             </button>
-            <div class="capability-actions">
-              <span>${feature.articleIds.length} 篇相关指南</span>
-              <a href="capabilities/${feature.id}.html">打开功能页</a>
-            </div>
+            <p class="capability-context-line">常用对象和入口：${feature.tags.slice(0, 4).map(escapeHtml).join("、")}</p>
+          </div>
+          <div class="story-points">${feature.tags.slice(0, 4).map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div>
+          <div class="capability-actions">
+            <span>${feature.articleIds.length} 篇相关指南</span>
+            <a href="capabilities/${feature.id}.html">打开功能页</a>
           </div>
         </article>
       `;

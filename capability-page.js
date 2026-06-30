@@ -69,22 +69,54 @@ function articleById(id) {
   return crmHelpArticles.find((article) => article.id === id);
 }
 
-function screenshotThumb(key) {
+function screenshotTitle(caption) {
+  return caption.replace(/^图\s*\d+：/, "");
+}
+
+function screenshotInline(key) {
   const image = crmScreenshots[key];
   if (!image) return "";
   const [src, caption] = image;
+  const title = screenshotTitle(caption);
   return `
-    <button class="guide-shot" type="button" data-image="${key}">
+    <button class="guide-shot guide-inline-shot" type="button" data-image="${key}" aria-label="打开截图：${escapeHtml(title)}">
       <img src="${assetPath(src)}" alt="${escapeHtml(caption)}" />
-      <span>${escapeHtml(caption)}</span>
+      <span>
+        <strong>界面参考</strong>
+        <small>${escapeHtml(title)}</small>
+      </span>
     </button>
   `;
 }
 
-function renderStepList(steps) {
+function screenshotsByStep(screenshots, stepCount) {
+  const buckets = Array.from({ length: stepCount }, () => []);
+  const shotCount = screenshots.length;
+  if (!stepCount || !shotCount) return buckets;
+
+  screenshots.forEach((key, index) => {
+    const target = shotCount === 1
+      ? Math.min(1, stepCount - 1)
+      : Math.min(stepCount - 1, Math.max(0, Math.round(((index + 1) * stepCount) / (shotCount + 1)) - 1));
+    buckets[target].push(key);
+  });
+
+  return buckets;
+}
+
+function renderStepList(article) {
+  const screenshotBuckets = screenshotsByStep(article.screenshots, article.steps.length);
   return `
     <ol class="step-list">
-      ${steps.map((step, index) => `<li><span>${index + 1}</span><p>${escapeHtml(step)}</p></li>`).join("")}
+      ${article.steps.map((step, index) => `
+        <li>
+          <span>${index + 1}</span>
+          <div class="step-copy">
+            <p>${escapeHtml(step)}</p>
+            ${screenshotBuckets[index].map(screenshotInline).join("")}
+          </div>
+        </li>
+      `).join("")}
     </ol>
   `;
 }
@@ -114,21 +146,13 @@ function renderGuideArticle(article, index) {
 
       <section class="guide-step-section">
         <h3>操作步骤</h3>
-        ${renderStepList(article.steps)}
+        ${renderStepList(article)}
       </section>
 
-      <div class="guide-columns">
-        <section>
-          <h3>常见卡点</h3>
-          ${renderList(article.tips)}
-        </section>
-        <section>
-          <h3>相关截图</h3>
-          <div class="guide-screenshot-grid">
-            ${article.screenshots.map(screenshotThumb).join("")}
-          </div>
-        </section>
-      </div>
+      <section class="guide-note-section">
+        <h3>常见卡点</h3>
+        ${renderList(article.tips)}
+      </section>
     </article>
   `;
 }
@@ -237,7 +261,7 @@ function renderPage() {
         <div>
           <p class="eyebrow">Step-by-step guides</p>
           <h2>具体操作步骤</h2>
-          <p>以下内容来自 Salesforce 使用手册，并按这个功能重新组织。每篇指南都写清楚开始前要准备什么、怎么操作、做完怎么检查，以及容易卡住的地方。</p>
+          <p>以下内容来自 Salesforce 使用手册，并按这个功能重新组织。每篇指南都写清楚开始前要准备什么、怎么操作、做完怎么检查，截图会穿插在对应步骤里。</p>
         </div>
         <a class="secondary-action compact" href="../index.html#help">查看全部指南</a>
       </div>
