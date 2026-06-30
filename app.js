@@ -889,7 +889,6 @@ const glossary = [
 const state = {
   category: "全部",
   helpCategory: "全部",
-  query: "",
   selectedArticle: new URLSearchParams(window.location.search).get("article") || "daily-rhythm",
   selectedWorkflow: "campaign",
 };
@@ -908,7 +907,6 @@ const els = {
   rulesGrid: document.querySelector("#rulesGrid"),
   faqList: document.querySelector("#faqList"),
   termGrid: document.querySelector("#termGrid"),
-  search: document.querySelector("#globalSearch"),
   reset: document.querySelector("#resetFilters"),
   showAllTerms: document.querySelector("#showAllTerms"),
   modal: document.querySelector("#imageModal"),
@@ -942,70 +940,12 @@ function screenshotButton(key) {
   </button>`;
 }
 
-function articleTitle(id) {
-  return helpArticles.find((article) => article.id === id)?.title || id;
-}
-
 function matchesFeature(feature) {
-  const query = state.query.trim().toLowerCase();
-  const categoryMatch = state.category === "全部" || feature.category === state.category;
-  if (!categoryMatch) return false;
-  if (!query) return true;
-  const haystack = [
-    feature.category,
-    feature.title,
-    feature.summary,
-    ...feature.solves,
-    ...feature.when,
-    ...feature.tags,
-    ...feature.articleIds.map(articleTitle),
-  ].join(" ").toLowerCase();
-  return haystack.includes(query);
+  return state.category === "全部" || feature.category === state.category;
 }
 
 function matchesArticle(article) {
-  const query = state.query.trim().toLowerCase();
-  const categoryMatch = state.helpCategory === "全部" || article.category === state.helpCategory;
-  if (!categoryMatch) return false;
-  if (!query) return true;
-  const haystack = [
-    article.category,
-    article.title,
-    article.summary,
-    ...article.prerequisites,
-    ...article.steps,
-    ...article.verify,
-    ...article.tips,
-  ].join(" ").toLowerCase();
-  return haystack.includes(query);
-}
-
-function articleScore(article, query) {
-  if (!query) return 0;
-  let score = 0;
-  if (article.title.toLowerCase() === query) score += 100;
-  if (article.title.toLowerCase().includes(query)) score += 60;
-  if (article.category.toLowerCase().includes(query)) score += 20;
-  if (article.summary.toLowerCase().includes(query)) score += 15;
-  if (article.prerequisites.join(" ").toLowerCase().includes(query)) score += 6;
-  if (article.steps.join(" ").toLowerCase().includes(query)) score += 8;
-  if (article.verify.join(" ").toLowerCase().includes(query)) score += 6;
-  if (article.tips.join(" ").toLowerCase().includes(query)) score += 5;
-  return score;
-}
-
-function featureScore(feature, query) {
-  if (!query) return 0;
-  let score = 0;
-  if (feature.title.toLowerCase() === query) score += 100;
-  if (feature.title.toLowerCase().includes(query)) score += 60;
-  if (feature.category.toLowerCase().includes(query)) score += 20;
-  if (feature.summary.toLowerCase().includes(query)) score += 15;
-  if (feature.solves.join(" ").toLowerCase().includes(query)) score += 10;
-  if (feature.when.join(" ").toLowerCase().includes(query)) score += 8;
-  if (feature.articleIds.map(articleTitle).join(" ").toLowerCase().includes(query)) score += 8;
-  if (feature.tags.join(" ").toLowerCase().includes(query)) score += 6;
-  return score;
+  return state.helpCategory === "全部" || article.category === state.helpCategory;
 }
 
 function renderWorkflow() {
@@ -1046,7 +986,7 @@ function renderHelpFilters() {
 function renderHelpArticleDetail(article) {
   if (!article) {
     els.helpArticleDetail.innerHTML = `
-      <div class="no-results">没有匹配的操作指南。可以换个关键词，例如 List View、Campaign Results、Samples Sent 或 Convert。</div>
+      <div class="no-results">当前分类下没有操作指南。请切换分类查看。</div>
     `;
     return;
   }
@@ -1092,10 +1032,7 @@ function renderHelpArticleDetail(article) {
 }
 
 function renderHelpCenter() {
-  const query = state.query.trim().toLowerCase();
-  const filtered = helpArticles
-    .filter(matchesArticle)
-    .sort((a, b) => articleScore(b, query) - articleScore(a, query));
+  const filtered = helpArticles.filter(matchesArticle);
   els.helpCount.textContent = `${filtered.length} 篇指南`;
   if (!filtered.length) {
     els.helpArticleList.innerHTML = `<div class="no-results">没有匹配的指南。</div>`;
@@ -1103,9 +1040,7 @@ function renderHelpCenter() {
     return;
   }
 
-  if (query) {
-    state.selectedArticle = filtered[0].id;
-  } else if (!state.selectedArticle || !filtered.some((article) => article.id === state.selectedArticle)) {
+  if (!state.selectedArticle || !filtered.some((article) => article.id === state.selectedArticle)) {
     state.selectedArticle = filtered[0].id;
   }
 
@@ -1130,13 +1065,10 @@ function renderFilters() {
 }
 
 function renderFeatures() {
-  const query = state.query.trim().toLowerCase();
-  const filtered = capabilities
-    .filter(matchesFeature)
-    .sort((a, b) => featureScore(b, query) - featureScore(a, query));
+  const filtered = capabilities.filter(matchesFeature);
   els.featureCount.textContent = `${filtered.length} 个功能`;
   if (!filtered.length) {
-    els.featureGrid.innerHTML = `<div class="no-results">没有匹配的功能。换个关键词试试，比如 Campaign、送样、Forecasts 或 Opportunity。</div>`;
+    els.featureGrid.innerHTML = `<div class="no-results">当前分类下没有功能。请切换分类查看。</div>`;
     return;
   }
 
@@ -1218,12 +1150,7 @@ function renderFaqs() {
 }
 
 function renderTerms(limit = 9) {
-  const query = state.query.trim().toLowerCase();
-  const filtered = glossary.filter(([en, zh, meaning]) => {
-    if (!query) return true;
-    return `${en} ${zh} ${meaning}`.toLowerCase().includes(query);
-  });
-  const items = limit ? filtered.slice(0, limit) : filtered;
+  const items = limit ? glossary.slice(0, limit) : glossary;
   els.termGrid.innerHTML = items
     .map(([en, zh, meaning]) => `
       <article class="term-card">
@@ -1231,7 +1158,7 @@ function renderTerms(limit = 9) {
         <p>${escapeHtml(zh)}：${escapeHtml(meaning)}</p>
       </article>
     `)
-    .join("") || `<div class="no-results">术语表没有匹配项。</div>`;
+    .join("");
 }
 
 function openImage(key) {
@@ -1318,11 +1245,9 @@ document.addEventListener("click", (event) => {
   if (jumpArticleButton) {
     const article = helpArticles.find((item) => item.id === jumpArticleButton.dataset.jumpArticle);
     if (!article) return;
-    state.query = "";
     state.category = "全部";
     state.helpCategory = "全部";
     state.selectedArticle = article.id;
-    els.search.value = "";
     renderFilters();
     renderFeatures();
     renderHelpFilters();
@@ -1350,26 +1275,10 @@ document.addEventListener("click", (event) => {
   }
 });
 
-els.search.addEventListener("input", (event) => {
-  state.query = event.target.value;
-  if (state.query.trim()) {
-    state.category = "全部";
-    state.helpCategory = "全部";
-    renderHelpFilters();
-    renderFilters();
-  }
-  renderHelpCenter();
-  renderFeatures();
-  renderTerms();
-  refreshIcons();
-});
-
 els.reset.addEventListener("click", () => {
   state.category = "全部";
   state.helpCategory = "全部";
-  state.query = "";
   state.selectedArticle = helpArticles[0].id;
-  els.search.value = "";
   renderHelpFilters();
   renderHelpCenter();
   renderFilters();
