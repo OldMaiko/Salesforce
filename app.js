@@ -866,26 +866,6 @@ const faqs = [
   ["报表中的 Campaign 和 Opportunity 对不上", "检查 Opportunity 是否关联正确的 Campaign，并确认 Contact Roles、Partners 和客户关系字段已维护。"],
 ];
 
-const glossary = [
-  ["Object", "对象", "一类业务数据，例如 Lead、Contact 或 Opportunity"],
-  ["Record", "记录", "某一个具体客户、联系人、展会或商机"],
-  ["Field", "字段", "记录中的一项信息，例如 Email、Status 或 Owner"],
-  ["Owner", "所有者 / 责任人", "负责跟进该记录的 Salesforce 用户"],
-  ["List View", "列表视图", "按筛选条件显示一组记录"],
-  ["Related List", "相关列表", "显示与当前记录关联的其他记录"],
-  ["Activity", "活动", "邮件、Task、Event 等客户互动记录"],
-  ["Task", "任务", "需要执行的跟进行动及到期日"],
-  ["Stage", "阶段", "Opportunity 当前所处的销售阶段"],
-  ["Status", "状态", "Lead 或 Sample Request 当前所处状态"],
-  ["Campaign Member", "Campaign 成员", "参与该 Campaign 的 Lead 或 Contact"],
-  ["Dashboard", "看板", "由多个图表或指标组成的汇总页面"],
-  ["Report", "报表", "可筛选、分组和导出的明细记录明细"],
-  ["Forecast", "预测", "基于商机金额、阶段和预计成交日期形成的销售预测"],
-  ["List Email", "列表邮件", "面向多个 Lead 或 Contact 发送并能追溯的邮件记录"],
-  ["Global Search", "全局搜索", "跨对象查找客户、公司、商机或其他记录"],
-  ["Utility Bar", "底部工具栏", "页面底部的 Notes、History、To Do List 等快捷工具"],
-];
-
 const state = {
   category: "全部",
   helpCategory: "全部",
@@ -906,8 +886,6 @@ const els = {
   objectGrid: document.querySelector("#objectGrid"),
   rulesGrid: document.querySelector("#rulesGrid"),
   faqList: document.querySelector("#faqList"),
-  termGrid: document.querySelector("#termGrid"),
-  showAllTerms: document.querySelector("#showAllTerms"),
   modal: document.querySelector("#imageModal"),
   modalImage: document.querySelector("#modalImage"),
   modalCaption: document.querySelector("#modalCaption"),
@@ -1183,18 +1161,6 @@ function renderFaqs() {
     .join("");
 }
 
-function renderTerms(limit = 9) {
-  const items = limit ? glossary.slice(0, limit) : glossary;
-  els.termGrid.innerHTML = items
-    .map(([en, zh, meaning]) => `
-      <article class="term-card">
-        <strong>${escapeHtml(en)}</strong>
-        <p>${escapeHtml(zh)}：${escapeHtml(meaning)}</p>
-      </article>
-    `)
-    .join("");
-}
-
 function openImage(key) {
   const image = screenshots[key];
   if (!image) return;
@@ -1239,7 +1205,6 @@ function renderAll() {
   renderObjects();
   renderRules();
   renderFaqs();
-  renderTerms();
   refreshIcons();
 }
 
@@ -1286,7 +1251,6 @@ document.addEventListener("click", (event) => {
     renderFeatures();
     renderHelpFilters();
     renderHelpCenter();
-    renderTerms();
     refreshIcons();
     document.querySelector("#help").scrollIntoView({ behavior: "smooth", block: "start" });
     return;
@@ -1307,10 +1271,6 @@ document.addEventListener("click", (event) => {
     const open = item.classList.toggle("is-open");
     faqButton.setAttribute("aria-expanded", String(open));
   }
-});
-
-els.showAllTerms.addEventListener("click", () => {
-  renderTerms(0);
 });
 
 els.modal.addEventListener("click", (event) => {
