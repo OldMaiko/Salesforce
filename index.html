@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>CRM 使用指南 | Salesforce 销售操作手册</title>
-    <link rel="stylesheet" href="styles.css?v=20260630-portalv2" />
+    <link rel="stylesheet" href="styles.css?v=20260701-customer-flows" />
     <script defer src="assets/lucide.min.js"></script>
-    <script defer src="app.js?v=20260630-portalv2"></script>
+    <script defer src="app.js?v=20260701-customer-flows"></script>
   </head>
   <body>
     <header class="topbar">
@@ -91,10 +91,11 @@
             <div class="workflow-block-heading">
               <div>
                 <p class="eyebrow">End-to-end flow</p>
-                <h3>销售全流程</h3>
+                <h3 id="workflowTitle">新用户维护与拓展</h3>
               </div>
-              <p>每一步都留下记录，展会结束后可以回到 Campaign 看板查结果。</p>
+              <p id="workflowDescription">每一步都留下记录，展会结束后可以回到 Campaign 看板查结果。</p>
             </div>
+            <div class="workflow-track-selector" id="workflowTrackSelector" aria-label="客户流程选择"></div>
             <div class="workflow-grid" id="workflowGrid"></div>
             <div class="workflow-detail" id="workflowDetail" aria-live="polite"></div>
           </div>

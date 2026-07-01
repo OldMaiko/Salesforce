@@ -106,6 +106,44 @@ const flowSteps = [
   },
 ];
 
+const existingCustomerFlowSteps = [
+  {
+    id: "existing-profile",
+    title: "Contact / Account",
+    subtitle: "资料更新",
+    summary: "先浏览并更新已有客户的 Contact / Account 信息，确保 Key Contact、地址和客户分级是最新口径。",
+    actions: ["检查并更新 Key Contact", "维护 Account / Contact 的地址信息", "确认客户分级、Owner 和重点客户标记"],
+    outputs: ["Key Contact 信息", "Billing / Shipping 地址", "客户分级和责任归属"],
+    color: "blue",
+  },
+  {
+    id: "existing-touchpoint",
+    title: "Sample / Visit",
+    subtitle: "定期维护",
+    summary: "围绕已有客户安排定期送样与用户拜访，并把会议纪要记录在对应 Contact / Account 的 Notes 中。",
+    actions: ["根据客户节奏创建或更新送样记录", "拜访后在对应 Contact / Account 中补充会议纪要", "为下一步跟进创建 Task 或更新 Opportunity"],
+    outputs: ["Contact Sample Request", "Account / Contact Notes", "下一步跟进 Task"],
+    color: "green",
+  },
+];
+
+const workflowTracks = [
+  {
+    id: "new-user",
+    label: "新用户维护与拓展",
+    eyebrow: "New customer growth",
+    summary: "保留原有 step-by-step 流程：从 Campaign 展会入口、名单导入、邮件联系、送样和商机推进，一直到 Review 复盘。",
+    steps: flowSteps,
+  },
+  {
+    id: "existing-customer",
+    label: "Existing customer 维护流程",
+    eyebrow: "Existing customer flow",
+    summary: "用于已有客户的日常维护：先校准 Contact / Account 基础信息，再把定期送样、拜访和会议纪要沉淀回客户记录。",
+    steps: existingCustomerFlowSteps,
+  },
+];
+
 const features = [
   {
     id: "quick-start",
@@ -870,10 +908,14 @@ const state = {
   category: "全部",
   helpCategory: "全部",
   selectedArticle: new URLSearchParams(window.location.search).get("article") || "daily-rhythm",
+  selectedWorkflowTrack: "new-user",
   selectedWorkflow: "campaign",
 };
 
 const els = {
+  workflowTitle: document.querySelector("#workflowTitle"),
+  workflowDescription: document.querySelector("#workflowDescription"),
+  workflowTrackSelector: document.querySelector("#workflowTrackSelector"),
   workflowGrid: document.querySelector("#workflowGrid"),
   workflowDetail: document.querySelector("#workflowDetail"),
   helpFilterbar: document.querySelector("#helpFilterbar"),
@@ -969,8 +1011,31 @@ function matchesArticle(article) {
   return state.helpCategory === "全部" || article.category === state.helpCategory;
 }
 
+function currentWorkflowTrack() {
+  return workflowTracks.find((track) => track.id === state.selectedWorkflowTrack) || workflowTracks[0];
+}
+
 function renderWorkflow() {
-  els.workflowGrid.innerHTML = flowSteps
+  const track = currentWorkflowTrack();
+  const steps = track.steps;
+  if (!steps.some((step) => step.id === state.selectedWorkflow)) {
+    state.selectedWorkflow = steps[0].id;
+  }
+
+  els.workflowTitle.textContent = track.label;
+  els.workflowDescription.textContent = track.summary;
+  els.workflowTrackSelector.innerHTML = workflowTracks
+    .map((item) => `
+      <button class="workflow-track-card ${state.selectedWorkflowTrack === item.id ? "is-active" : ""}" type="button" data-workflow-track="${item.id}">
+        <span>${escapeHtml(item.eyebrow)}</span>
+        <strong>${escapeHtml(item.label)}</strong>
+        <em>${item.steps.length} 步</em>
+      </button>
+    `)
+    .join("");
+
+  els.workflowGrid.classList.toggle("is-short-flow", steps.length <= 3);
+  els.workflowGrid.innerHTML = steps
     .map((step, index) => `
       <button class="workflow-card ${state.selectedWorkflow === step.id ? "is-active" : ""}" type="button" data-workflow="${step.id}">
         <span class="step-number">${index + 1}</span>
@@ -982,10 +1047,10 @@ function renderWorkflow() {
     `)
     .join("");
 
-  const step = flowSteps.find((item) => item.id === state.selectedWorkflow) || flowSteps[0];
+  const step = steps.find((item) => item.id === state.selectedWorkflow) || steps[0];
   els.workflowDetail.innerHTML = `
     <div>
-      <div class="detail-meta">${tag(step.title, step.color)}${tag(step.subtitle)}</div>
+      <div class="detail-meta">${tag(track.label, "teal")}${tag(step.title, step.color)}${tag(step.subtitle)}</div>
       <h3>${escapeHtml(step.title)}：${escapeHtml(step.subtitle)}</h3>
       <p>${escapeHtml(step.summary)}</p>
       <h4>要做的事</h4>
@@ -1212,6 +1277,14 @@ els.workflowGrid.addEventListener("click", (event) => {
   const button = event.target.closest("[data-workflow]");
   if (!button) return;
   state.selectedWorkflow = button.dataset.workflow;
+  renderWorkflow();
+});
+
+els.workflowTrackSelector.addEventListener("click", (event) => {
+  const button = event.target.closest("[data-workflow-track]");
+  if (!button) return;
+  state.selectedWorkflowTrack = button.dataset.workflowTrack;
+  state.selectedWorkflow = currentWorkflowTrack().steps[0].id;
   renderWorkflow();
 });
 
