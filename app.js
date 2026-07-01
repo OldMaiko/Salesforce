@@ -117,13 +117,31 @@ const existingCustomerFlowSteps = [
     color: "blue",
   },
   {
-    id: "existing-touchpoint",
-    title: "Sample / Visit",
-    subtitle: "定期维护",
-    summary: "围绕已有客户安排定期送样与用户拜访，并把会议纪要记录在对应 Contact / Account 的 Notes 中。",
-    actions: ["根据客户节奏创建或更新送样记录", "拜访后在对应 Contact / Account 中补充会议纪要", "为下一步跟进创建 Task 或更新 Opportunity"],
-    outputs: ["Contact Sample Request", "Account / Contact Notes", "下一步跟进 Task"],
+    id: "existing-sample",
+    title: "Contact Sample Request",
+    subtitle: "定期送样",
+    summary: "根据客户维护节奏，用 Contact Sample Request 记录定期送样需求、样品明细和后续物流状态。",
+    actions: ["从对应 Contact 进入 Contact Sample Request", "补齐 SKU、数量、用途和收件信息", "根据状态跟进 Request Sent、Samples Sent 和 Tracking"],
+    outputs: ["Contact Sample Request", "SKU / 数量 / 用途", "Tracking 和送样状态"],
     color: "green",
+  },
+  {
+    id: "existing-visit",
+    title: "Visit / Notes",
+    subtitle: "拜访纪要",
+    summary: "完成用户拜访后，把会议纪要记录到对应 Contact / Account 的 Notes 中，保留客户反馈和下一步动作。",
+    actions: ["在拜访后整理客户反馈、需求和决策人信息", "进入对应 Contact / Account 添加 Notes", "把下一步跟进事项同步成 Task"],
+    outputs: ["Account / Contact Notes", "客户反馈和会议纪要", "下一步跟进 Task"],
+    color: "green",
+  },
+  {
+    id: "existing-opportunity",
+    title: "Opportunity",
+    subtitle: "成单推进",
+    summary: "对于已经有明确采购可能、预算或项目时间线的客户，创建 Opportunity 并维护阶段、金额和预计成交日期。",
+    actions: ["判断客户是否已有明确采购机会", "创建或更新 Opportunity", "维护 Stage、Amount、Close Date、Contact Roles 和来源信息"],
+    outputs: ["Opportunity 记录", "预计成交金额和日期", "可追踪的销售 Pipeline"],
+    color: "amber",
   },
 ];
 
@@ -139,7 +157,7 @@ const workflowTracks = [
     id: "existing-customer",
     label: "Existing customer 维护流程",
     eyebrow: "Existing customer flow",
-    summary: "用于已有客户的日常维护：先校准 Contact / Account 基础信息，再把定期送样、拜访和会议纪要沉淀回客户记录。",
+    summary: "用于已有客户的日常维护：更新客户资料，定期送样，记录拜访纪要，并把可成单客户推进到 Opportunity。",
     steps: existingCustomerFlowSteps,
   },
 ];
@@ -1034,6 +1052,7 @@ function renderWorkflow() {
     `)
     .join("");
 
+  els.workflowGrid.style.setProperty("--workflow-step-count", steps.length);
   els.workflowGrid.classList.toggle("is-short-flow", steps.length <= 3);
   els.workflowGrid.innerHTML = steps
     .map((step, index) => `
