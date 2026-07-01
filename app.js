@@ -127,11 +127,11 @@ const existingCustomerFlowSteps = [
   },
   {
     id: "existing-visit",
-    title: "Visit / Notes",
-    subtitle: "拜访纪要",
-    summary: "完成用户拜访后，把会议纪要记录到对应 Contact / Account 的 Notes 中，保留客户反馈和下一步动作。",
-    actions: ["在拜访后整理客户反馈、需求和决策人信息", "进入对应 Contact / Account 添加 Notes", "把下一步跟进事项同步成 Task"],
-    outputs: ["Account / Contact Notes", "客户反馈和会议纪要", "下一步跟进 Task"],
+    title: "Visit / Activity",
+    subtitle: "拜访记录",
+    summary: "完成用户拜访后，把会议纪要记录到对应 Contact / Account 的 Activity 中，保留客户反馈和下一步动作。",
+    actions: ["在拜访后整理客户反馈、需求和决策人信息", "进入对应 Contact / Account 创建或更新 Activity", "把下一步跟进事项同步成 Task"],
+    outputs: ["Account / Contact Activity", "客户反馈和会议纪要", "下一步跟进 Task"],
     color: "green",
   },
   {
@@ -157,7 +157,7 @@ const workflowTracks = [
     id: "existing-customer",
     label: "Existing customer 维护流程",
     eyebrow: "Existing customer flow",
-    summary: "用于已有客户的日常维护：更新客户资料，定期送样，记录拜访纪要，并把可成单客户推进到 Opportunity。",
+    summary: "用于已有客户的日常维护：更新客户资料，定期送样，将拜访纪要记录到 Activity，并把可成单客户推进到 Opportunity。",
     steps: existingCustomerFlowSteps,
   },
 ];
