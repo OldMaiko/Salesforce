@@ -76,13 +76,13 @@ function screenshotTitle(caption) {
 function screenshotInline(key) {
   const image = crmScreenshots[key];
   if (!image) return "";
-  const [src, caption] = image;
+  const [src, caption, label = "界面参考"] = image;
   const title = screenshotTitle(caption);
   return `
     <button class="guide-shot guide-inline-shot" type="button" data-image="${key}" aria-label="打开截图：${escapeHtml(title)}">
       <img src="${assetPath(src)}" alt="${escapeHtml(caption)}" />
       <span>
-        <strong>界面参考</strong>
+        <strong>${escapeHtml(label)}</strong>
         <small>${escapeHtml(title)}</small>
       </span>
     </button>

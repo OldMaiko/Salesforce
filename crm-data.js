@@ -37,6 +37,10 @@ const screenshots = {
   fig36: ["assets/fig36.jpg", "图 36：发送客户确认并完成 Samples Sent"],
   fig37: ["assets/fig37.jpg", "图 37：完善 Opportunity 信息并关联 Campaign"],
   fig38: ["assets/uat-sample-skus-overview.png", "图 38：Draft 中的 Sample SKUs 编辑区"],
+  emailShipmentCreated: ["assets/email-shipment-created-uat.png", "UAT 实际发送邮件示例：Shipment Created（Tracking 已就绪）", "UAT 实际发送邮件示例"],
+  emailShipping: ["assets/email-shipping-uat.png", "UAT 实际发送邮件示例：开始运输（客户通知）", "UAT 实际发送邮件示例"],
+  emailAttentionRequired: ["assets/email-attention-required-uat.png", "UAT 实际发送邮件示例：Attention Required（内部通知）", "UAT 实际发送邮件示例"],
+  emailDelivered: ["assets/email-delivered-uat.png", "UAT 实际发送邮件示例：Delivered（按运单通知客户）", "UAT 实际发送邮件示例"],
 };
 
 const capabilities = [
@@ -96,7 +100,7 @@ const capabilities = [
     id: "sample",
     category: "送样",
     title: "样品申请与客户确认",
-    summary: "从 Contact Sample Request 创建 Draft，统一编辑 Samples；发货后按 Tracking 分别跟进配送与通知。",
+    summary: "从 Contact Sample Request 创建 Draft，统一编辑 Samples；后续按 Tracking 管理客户通知和物流状态。",
     icon: "package-check",
     accent: "green",
     screenshot: "fig38",
@@ -428,10 +432,11 @@ const helpArticles = [
     category: "送样",
     title: "填写配送信息并跟进 AfterShip",
     summary: "确认申请后在原生 Contact Samples 维护物流资料，并按 Tracking 用 Sample Fulfilled 记录发货。",
+    screenshots: ["emailShipmentCreated", "emailShipping", "emailAttentionRequired", "emailDelivered"],
     prerequisites: ["送样申请状态已为 Request Confirmed。", "配送信息已经从内部同事或承运商获得。"],
-    steps: ["在原生 Contact Samples 相关列表打开样品。", "填写或更新 Tracking、Shipping Courier、ETA（Date of Shipment）和需要维护的 PO#。", "至少一行已有 Tracking 后，使用 Sample Fulfilled；系统只处理有 Tracking 的行，并按每个 Tracking 单独发送发货邮件。", "未填 Tracking 的行会保留；后续补填后由已启用的每小时同步发现，首次查询只建立基线。", "AfterShip 只在 API 有返回时补充空白 ETA/Courier，不覆盖已有值。", "如显示 Attention Required，查看对应运单的最新更新并与销助处理。", "只有同一 Request 的全部样品均 Delivered，Request 才变为 Delivered。"],
-    verify: ["状态显示为 Shipment Created，后续物流状态可按承运商更新。", "每封发货或送达邮件只包含一个 Tracking 的样品。", "Tracking、Courier 与 ETA 正确，且已有 ETA/Courier 没有被自动覆盖。"],
-    tips: ["AfterShip 启用后每小时同步。首次查询不会补发旧物流状态；之后符合范围的异常或送达变化才会通知。没有客户邮箱时仍会更新发货状态，但不会发送客户邮件。系统不会把日期范围猜成单一 ETA。Delivered 后如需更正关键资料，请联系管理员；补寄请新建 Request。如物流长时间未更新，请联系管理员检查同步任务和凭据。"],
+    steps: ["在原生 Contact Samples 相关列表打开样品。", "填写或更新 Tracking、Shipping Courier、ETA（Date of Shipment）和需要维护的 PO#。SKU 会完整显示、长名称自动换行，可打开产品链接；Quantity 以整数显示。", "至少一行已有 Tracking 后，使用 Sample Fulfilled；系统只处理有 Tracking 的行，Tracking 就绪时按运单发送 Shipment Created 客户邮件。未填 Tracking 的行会保留，允许后续部分履行。", "首次同步如已匹配到 AfterShip InTransit、OutForDelivery 或 AvailableForPickup 任一运输状态，会按该 Tracking 发送一次开始运输客户邮件；同一运输状态组内不重复发送。Salesforce Request 会显示 Out for Delivery 阶段。", "AfterShip 只在 API 有返回时补充空白 ETA/Courier，不覆盖已有值。", "如显示 Attention Required，查看对应运单的最新更新并与销助处理；此类邮件只发给内部销售和支持人员。", "Delivered 时按 Tracking 向客户发送通知；只有同一 Request 的全部样品均 Delivered，Request 才变为 Delivered。"],
+    verify: ["状态显示为 Shipment Created，后续物流状态可按承运商更新。", "Shipment Created、开始运输和 Delivered 客户邮件均按 Tracking 分开；Attention Required 只发内部人员。", "Tracking、Courier 与 ETA 正确，SKU 可完整阅读，Quantity 为整数，且已有 ETA/Courier 没有被自动覆盖。"],
+    tips: ["AfterShip 启用后每小时同步。首次匹配到符合条件的状态即可通知；没有客户邮箱时仍会更新发货状态，但不会发送客户邮件。系统不会把日期范围猜成单一 ETA。Delivered 后如需更正关键资料，请联系管理员；补寄请新建 Request。如物流长时间未更新，请联系管理员检查同步任务和凭据。"],
   },
   {
     id: "opportunity-key-account",
