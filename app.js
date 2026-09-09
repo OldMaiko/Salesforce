@@ -985,10 +985,11 @@ function screenshotInline(key) {
 
 function screenshotsByStep(screenshotKeys, stepCount) {
   const buckets = Array.from({ length: stepCount }, () => []);
-  const shotCount = screenshotKeys.length;
+  const validScreenshotKeys = Array.isArray(screenshotKeys) ? screenshotKeys : [];
+  const shotCount = validScreenshotKeys.length;
   if (!stepCount || !shotCount) return buckets;
 
-  screenshotKeys.forEach((key, index) => {
+  validScreenshotKeys.forEach((key, index) => {
     const target = shotCount === 1
       ? Math.min(1, stepCount - 1)
       : Math.min(stepCount - 1, Math.max(0, Math.round(((index + 1) * stepCount) / (shotCount + 1)) - 1));
@@ -1090,10 +1091,11 @@ function renderHelpArticleDetail(article) {
     return;
   }
 
+  const screenshotCount = Array.isArray(article.screenshots) ? article.screenshots.length : 0;
   els.helpArticleDetail.innerHTML = `
     <div class="article-hero">
       <div>
-        <div class="detail-meta">${tag(article.category, "teal")}${tag(`${article.steps.length} 个步骤`)}${tag(`${article.screenshots.length} 张截图`)}</div>
+        <div class="detail-meta">${tag(article.category, "teal")}${tag(`${article.steps.length} 个步骤`)}${tag(`${screenshotCount} 张截图`)}</div>
         <h3>${escapeHtml(article.title)}</h3>
         <p>${escapeHtml(article.summary)}</p>
       </div>
@@ -1164,8 +1166,22 @@ function renderFeatures() {
 
   els.featureGrid.innerHTML = filtered
     .map((feature) => {
-      const [src, caption] = screenshots[feature.screenshot];
-      const previewTitle = caption.replace(/^图\s*\d+：/, "");
+      const image = screenshots[feature.screenshot];
+      const preview = image
+        ? (() => {
+          const [src, caption] = image;
+          const previewTitle = caption.replace(/^图\s*\d+：/, "");
+          return `
+            <div class="capability-inline-shot">
+              <img src="${src}" alt="${escapeHtml(caption)}" />
+              <span>
+                <strong>页面预览</strong>
+                <small>${escapeHtml(previewTitle)}</small>
+              </span>
+            </div>
+          `;
+        })()
+        : "";
       return `
         <a class="capability-card ${feature.accent}" href="capabilities/${feature.id}.html" aria-label="打开功能页：${escapeHtml(feature.title)}">
           <div class="capability-top">
@@ -1175,13 +1191,7 @@ function renderFeatures() {
           <h3>${escapeHtml(feature.title)}</h3>
           <div class="capability-story">
             <p>${escapeHtml(feature.summary)}</p>
-            <div class="capability-inline-shot">
-              <img src="${src}" alt="${escapeHtml(caption)}" />
-              <span>
-                <strong>页面预览</strong>
-                <small>${escapeHtml(previewTitle)}</small>
-              </span>
-            </div>
+            ${preview}
             <p class="capability-context-line">常用对象和入口：${feature.tags.slice(0, 4).map(escapeHtml).join("、")}</p>
           </div>
           <div class="story-points">${feature.tags.slice(0, 4).map((item) => `<span>${escapeHtml(item)}</span>`).join("")}</div>

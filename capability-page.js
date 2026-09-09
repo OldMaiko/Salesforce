@@ -91,10 +91,11 @@ function screenshotInline(key) {
 
 function screenshotsByStep(screenshots, stepCount) {
   const buckets = Array.from({ length: stepCount }, () => []);
-  const shotCount = screenshots.length;
+  const validScreenshots = Array.isArray(screenshots) ? screenshots : [];
+  const shotCount = validScreenshots.length;
   if (!stepCount || !shotCount) return buckets;
 
-  screenshots.forEach((key, index) => {
+  validScreenshots.forEach((key, index) => {
     const target = shotCount === 1
       ? Math.min(1, stepCount - 1)
       : Math.min(stepCount - 1, Math.max(0, Math.round(((index + 1) * stepCount) / (shotCount + 1)) - 1));
